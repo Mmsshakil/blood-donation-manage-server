@@ -88,12 +88,29 @@ async function run() {
                 }
             }
 
-            const result = await userCollection.updateOne(query,user, options);
+            const result = await userCollection.updateOne(query, user, options);
             res.send(result);
         })
 
+        // get all useres
+        app.get('/users', async (req, res) => {
+            const result = await userCollection.find().toArray();
+            res.send(result);
+        })
 
-     
+        // make admin api
+        app.patch('/users/admin/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    role: 'admin'
+                }
+            }
+            const result = await userCollection.updateOne(query, updatedDoc);
+            res.send(result);
+
+        })
 
 
         // --------------------------------

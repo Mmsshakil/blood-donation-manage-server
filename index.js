@@ -98,7 +98,7 @@ async function run() {
             res.send(result);
         })
 
-        // make admin api
+        // make admin from donor or volunter api
         app.patch('/users/admin/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -109,7 +109,59 @@ async function run() {
             }
             const result = await userCollection.updateOne(query, updatedDoc);
             res.send(result);
+        })
 
+        // make donor from admin
+        app.patch('/users/donor/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    role: 'donor'
+                }
+            }
+            const result = await userCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
+
+        // make volunteer from donor 
+        app.patch('/users/volunteer/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    role: 'volunteer'
+                }
+            }
+            const result = await userCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
+        // make status blocked from active
+        app.patch('/users/block/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    status: 'blocked'
+                }
+            }
+            const result = await userCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
+        // make status unblocked from block
+        app.patch('/users/active/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    status: 'active'
+                }
+            }
+            const result = await userCollection.updateOne(query, updatedDoc);
+            res.send(result);
         })
 
 

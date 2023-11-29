@@ -34,11 +34,11 @@ async function run() {
         const districtsCollection = client.db('bloodDB').collection("districts");
 
         // ------------location related api-------------------
-        app.get('/upazilas', async(req, res) =>{
+        app.get('/upazilas', async (req, res) => {
             const result = await upazilasCollection.find().toArray();
             res.send(result);
         })
-        app.get('/districts', async(req, res) =>{
+        app.get('/districts', async (req, res) => {
             const result = await districtsCollection.find().toArray();
             res.send(result);
         })
@@ -71,6 +71,30 @@ async function run() {
             const result = await userCollection.findOne(query);
             res.send(result);
         })
+
+        // update one user by id
+        app.put('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedUser = req.body;
+            const user = {
+                $set: {
+                    name: updatedUser.name,
+                    blodGroup: updatedUser.blodGroup,
+                    district: updatedUser.district,
+                    upazila: updatedUser.upazila,
+                    photoURL: updatedUser.photoURL
+                }
+            }
+
+            const result = await userCollection.updateOne(query,user, options);
+            res.send(result);
+        })
+
+
+     
+
 
         // --------------------------------
 

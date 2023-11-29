@@ -30,6 +30,21 @@ async function run() {
         await client.connect();
 
         const userCollection = client.db('bloodDB').collection("users");
+        const upazilasCollection = client.db('bloodDB').collection("upazilas");
+        const districtsCollection = client.db('bloodDB').collection("districts");
+
+        // ------------location related api-------------------
+        app.get('/upazilas', async(req, res) =>{
+            const result = await upazilasCollection.find().toArray();
+            res.send(result);
+        })
+        app.get('/districts', async(req, res) =>{
+            const result = await districtsCollection.find().toArray();
+            res.send(result);
+        })
+
+
+        // ---------------------------------------------------
 
         //---------------- user related api ------------------
 

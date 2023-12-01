@@ -32,6 +32,7 @@ async function run() {
         const userCollection = client.db('bloodDB').collection("users");
         const upazilasCollection = client.db('bloodDB').collection("upazilas");
         const districtsCollection = client.db('bloodDB').collection("districts");
+        const donationRequestCollection = client.db('bloodDB').collection("donationRequests");
 
         // ------------location related api-------------------
         app.get('/upazilas', async (req, res) => {
@@ -56,7 +57,7 @@ async function run() {
 
         })
 
-        // get one user by email
+        // get one user by email for profile
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
@@ -168,6 +169,29 @@ async function run() {
         // --------------------------------
 
 
+        //------ donation realted api-------
+
+
+        // donation request added to the database
+        app.post('/donationRequests', async (req, res) => {
+            const user = req.body;
+            const result = await donationRequestCollection.insertOne(user);
+            res.send(result);
+        })
+
+        // show all requests
+        app.get('/requests', async (req, res) => {
+            const result = await donationRequestCollection.find().toArray();
+            res.send(result);
+        })
+
+
+        // app.get('/requests/:email', async (req, res) => {
+        //     const email = req.params.email;
+        //     const query = { email: email };
+        //     const result = await userCollection.find(query);
+        //     res.send(result);
+        // })
 
 
 
@@ -175,7 +199,7 @@ async function run() {
 
 
 
-
+        // --------------------------------------
 
 
 

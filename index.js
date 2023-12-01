@@ -201,10 +201,57 @@ async function run() {
             res.send(result);
         })
 
+        // get one donation request by id for update
+        app.get('/requests/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await donationRequestCollection.findOne(query);
+            res.send(result);
+        })
 
+        // update one request by id
+        app.put('/request/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updateRequest = req.body;
+            const request = {
+                $set: {
+                    // name: updatedUser.name,
+                    recipientName: updateRequest.recipientName,
+                    hospitalName: updateRequest.hospitalName,
+                    district: updateRequest.district,
+                    upazila: updateRequest.upazila,
+                    fullAddress: updateRequest.fullAddress,
+                    date: updateRequest.date,
+                    time: updateRequest.time,
+                    requestMessage: updateRequest.requestMessage
+                }
+            }
 
+            const result = await donationRequestCollection.updateOne(query, request, options);
+            res.send(result);
+        })
 
+        // update donation status pending to inprogress 
+        // add donar name and email also
+        app.put('/donationConfirm/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updateRequest = req.body;
+            const request = {
+                $set: {
+                    // name: updatedUser.name,
+                    donarName: updateRequest.donarName,
+                    donarEmail: updateRequest.donarEmail,
+                    donationStatus: updateRequest.donationStatus
+                }
+            }
 
+            const result = await donationRequestCollection.updateOne(query, request, options);
+            res.send(result);
+        })
 
 
 

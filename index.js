@@ -185,6 +185,14 @@ async function run() {
             res.send(result);
         })
 
+        // show all requests for one user
+        app.get('/myRequest', async (req, res) => {
+            const email = req.query.email;
+            const query = { requesterEmail: email };
+            const result = await donationRequestCollection.find(query).toArray();
+            res.send(result);
+        })
+
 
         // app.get('/requests/:email', async (req, res) => {
         //     const email = req.params.email;

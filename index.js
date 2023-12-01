@@ -193,13 +193,14 @@ async function run() {
             res.send(result);
         })
 
+        // delete donation request
+        app.delete('/myRequest/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await donationRequestCollection.deleteOne(query);
+            res.send(result);
+        })
 
-        // app.get('/requests/:email', async (req, res) => {
-        //     const email = req.params.email;
-        //     const query = { email: email };
-        //     const result = await userCollection.find(query);
-        //     res.send(result);
-        // })
 
 
 

@@ -253,6 +253,33 @@ async function run() {
             res.send(result);
         })
 
+        // update donation status done / cancel
+        app.put('/statusUpdate/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const statusUpdate = req.body;
+            const request = {
+                $set: {
+                    donationStatus: statusUpdate.donationStatus
+                }
+            }
+
+            const result = await donationRequestCollection.updateOne(query, request, options);
+            res.send(result);
+        })
+
+        // statistics for admin and volunter
+        app.get('/adminStatistic', async (req, res) => {
+            const users = await userCollection.estimatedDocumentCount();
+            const requests = await donationRequestCollection.estimatedDocumentCount();
+
+            res.send({
+                users,
+                requests
+            })
+        })
+
 
 
         // --------------------------------------

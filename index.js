@@ -27,12 +27,13 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const userCollection = client.db('bloodDB').collection("users");
         const upazilasCollection = client.db('bloodDB').collection("upazilas");
         const districtsCollection = client.db('bloodDB').collection("districts");
         const donationRequestCollection = client.db('bloodDB').collection("donationRequests");
+        const blogsCollection = client.db('bloodDB').collection("blogs");
 
         // ------------location related api-------------------
         app.get('/upazilas', async (req, res) => {
@@ -281,15 +282,43 @@ async function run() {
         })
 
 
+        // --------------blog realated api ------------------------
 
-        // --------------------------------------
+        // create a blog
+        app.post('/blogs', async (req, res) => {
+            const blog = req.body;
+            const result = await blogsCollection.insertOne(blog);
+            res.send(result);
+
+        })
+
+        // get all blogs
+        app.get('/blogs', async (req, res) => {
+            const result = await blogsCollection.find().toArray();
+            res.send(result);
+        })
+
+        // delete a blog
+        app.delete('/blogs/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await blogsCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
 
+
+
+
+
+
+
+        // -------------------------------------------------------
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
